@@ -60,6 +60,38 @@
                 $this->setDtCadastro(new DateTime($row['DtCadastro']));
             }
         }
+        
+        public static function getList(){
+            $sql = new Sql();
+            return $sql->select("SELECT * FROM tb_usuarios ORDER BY DesLogin");
+            
+        }
+
+        public static function search($login){
+            $sql = new Sql();
+            return $sql->select("SELECT * FROM tb_usuarios WHERE DesLogin LIKE :SEARCH ORDER BY Deslogin", array(
+                ':SEARCH'=>"%" . $login . "%"
+            ));
+        }
+
+        public function login($login, $password){
+            $sql = new Sql();
+            $result = $sql->select("SELECT * FROM tb_usuarios WHERE DesLogin = :LOGIN AND DesSenha = :PASSWORD", array(
+                ":LOGIN"=>$login,
+                ":PASSWORD"=>$password
+            ));
+
+            if(count($result) > 0){
+                $row = $result[0];
+
+                $this->setIdUsuario($row['IdUsuario']);
+                $this->setDesLogin($row['DesLogin']);
+                $this->setDesSenha($row['DesSenha']);
+                $this->setDtCadastro(new DateTime($row['DtCadastro']));
+            }else{
+                throw new EXception("Login e/ou senha inválidos");  
+            }
+        }
 
         public function __toString(){
            return json_encode(array(
