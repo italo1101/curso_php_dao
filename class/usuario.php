@@ -45,6 +45,8 @@
             $this->DtCadastro = $cadastro;
         }
 
+        // Carrega o usuário pelo id
+
         public function loadById($id){
             $sql = new Sql();
             $result = $sql->select("SELECT * FROM tb_usuarios WHERE IdUsuario = :ID", array(
@@ -52,14 +54,11 @@
             ));
 
             if(count($result) > 0){
-                $row = $result[0];
-
-                $this->setIdUsuario($row['IdUsuario']);
-                $this->setDesLogin($row['DesLogin']);
-                $this->setDesSenha($row['DesSenha']);
-                $this->setDtCadastro(new DateTime($row['DtCadastro']));
+                $this->setData($result[0]);
             }
         }
+
+        // Lista todos os usuários
         
         public static function getList(){
             $sql = new Sql();
@@ -74,6 +73,8 @@
             ));
         }
 
+        // Carrega um usuário utilizando login e senha
+
         public function login($login, $password){
             $sql = new Sql();
             $result = $sql->select("SELECT * FROM tb_usuarios WHERE DesLogin = :LOGIN AND DesSenha = :PASSWORD", array(
@@ -82,15 +83,42 @@
             ));
 
             if(count($result) > 0){
-                $row = $result[0];
-
-                $this->setIdUsuario($row['IdUsuario']);
-                $this->setDesLogin($row['DesLogin']);
-                $this->setDesSenha($row['DesSenha']);
-                $this->setDtCadastro(new DateTime($row['DtCadastro']));
+                $this->setData($result[0]);
             }else{
-                throw new EXception("Login e/ou senha inválidos");  
+                throw new Exception("Login e/ou senha inválidos");  
             }
+        }
+
+        // Método para pegar os dados
+
+        public function setData($data){
+            $this->setIdUsuario($data['IdUsuario']);
+            $this->setDesLogin($data['DesLogin']);
+            $this->setDesSenha($data['DesSenha']);
+            $this->setDtCadastro(new DateTime($data['DtCadastro']));
+        }
+
+        // Insere um aluno no banco de dados
+
+        public function insert(){
+            $sql = new Sql();
+            $results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+                ':LOGIN'=>$this->getDeslogin(),
+                ':PASSWORD'=>$this->getDesSenha()
+            ));
+
+            if(count($results) > 0){
+                $this->setData($results[0]);
+            }else{
+                throw new Exception("Não foi possível adicionar o usuário");
+            }
+        }
+
+        // construtor para passar login e senha do usuário
+ 
+        public function __construct($login= "", $password = ""){
+            $this->setDeslogin($login);
+            $this->setDesSenha($password);
         }
 
         public function __toString(){
