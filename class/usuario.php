@@ -114,6 +114,8 @@
             }
         }
 
+        // Atualizar o usuário
+
         public function update($login, $password){
 
             $this->setDesLogin($login);
@@ -126,6 +128,22 @@
                 ':ID'=>$this->getIdUsuario()
             ));
         }
+
+        // Deletar usuário
+
+        public function delete(){
+            $sql = new Sql();
+            $sql->executeQuery("DELETE FROM tb_usuarios WHERE IdUsuario = :ID", array(
+                ':ID'=>$this->getIdUsuario()
+            ));
+
+            $this->setIdUsuario(0);
+            $this->setDesLogin("");
+            $this->setDesSenha("");
+            $this->setDtCadastro(new DateTime());
+        }
+
+
 
         // construtor para passar login e senha do usuário
  

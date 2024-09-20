@@ -30,11 +30,20 @@
 
     // echo $aluno;
 
+    // Alterar usuário
+
+    // $usuario = new Usuario();
+
+    // $usuario->loadById(8);
+
+    // $usuario->update("professor", "!@#$%");
+
+    // echo $usuario;
+
     $usuario = new Usuario();
 
-    $usuario->loadById(8);
-
-    $usuario->update("professor", "!@#$%");
+    $usuario->loadById(10);
+    $usuario->delete();
 
     echo $usuario;
 ?>
