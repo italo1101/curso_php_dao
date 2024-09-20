@@ -114,6 +114,19 @@
             }
         }
 
+        public function update($login, $password){
+
+            $this->setDesLogin($login);
+            $this->setDesSenha($password);
+
+            $sql = new Sql();
+            $sql->executeQuery("UPDATE tb_usuarios SET DesLogin = :LOGIN, DesSenha = :PASSWORD WHERE IdUsuario = :ID", array(
+                ':LOGIN'=>$this->getDesLogin(),
+                ':PASSWORD'=>$this->getDesSenha(),
+                ':ID'=>$this->getIdUsuario()
+            ));
+        }
+
         // construtor para passar login e senha do usuário
  
         public function __construct($login= "", $password = ""){

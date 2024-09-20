@@ -24,9 +24,17 @@
 
     // Criar um novo usuário
 
-    $aluno = new Usuario("aluno", "@alun0");
+    // $aluno = new Usuario("aluno", "@alun0");
 
-    $aluno->insert();
+    // $aluno->insert();
 
-    echo $aluno;
+    // echo $aluno;
+
+    $usuario = new Usuario();
+
+    $usuario->loadById(8);
+
+    $usuario->update("professor", "!@#$%");
+
+    echo $usuario;
 ?>
